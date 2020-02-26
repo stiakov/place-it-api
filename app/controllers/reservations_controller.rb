@@ -1,5 +1,6 @@
 class ReservationsController < ApplicationController
-  before_action :set_reservation, only: [:show, :update, :destroy]
+  before_action :set_reservation, only: %i[show update destroy]
+  before_action :available_seats?, only: [:create]
 
   # GET /reservations
   def index
@@ -17,7 +18,7 @@ class ReservationsController < ApplicationController
   def create
     @reservation = Reservation.new(reservation_params)
 
-    if @reservation.save
+    if @reservation.save && available_seats?
       render json: @reservation, status: :created, location: @reservation
     else
       render json: @reservation.errors, status: :unprocessable_entity
@@ -39,13 +40,17 @@ class ReservationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_reservation
-      @reservation = Reservation.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_reservation
+    @reservation = Reservation.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def reservation_params
-      params.fetch(:reservation, {})
-    end
+  # Only allow a trusted parameter "white list" through.
+  def reservation_params
+    params.permit(:user_id, :projection_id)
+  end
+
+  def available_seats?
+    Reservation.all.where(projection_id: reservation_params[:projection_id]).count < 9
+  end
 end
