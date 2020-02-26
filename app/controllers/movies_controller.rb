@@ -39,13 +39,13 @@ class MoviesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_movie
-      @movie = Movie.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_movie
+    @movie = Movie.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def movie_params
-      params.fetch(:movie, {})
-    end
+  # Only allow a trusted parameter "white list" through.
+  def movie_params
+    params.permit(:title, :plot, :poster)
+  end
 end
