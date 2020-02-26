@@ -27,19 +27,19 @@ ActiveRecord::Schema.define(version: 2020_02_26_193359) do
 
   create_table "projections", force: :cascade do |t|
     t.bigint "movie_id"
+    t.bigint "reservation_id"
     t.date "showtime"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["movie_id"], name: "index_projections_on_movie_id"
+    t.index ["reservation_id"], name: "index_projections_on_reservation_id"
   end
 
   create_table "reservations", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "movie_id"
     t.bigint "projection_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["movie_id"], name: "index_reservations_on_movie_id"
     t.index ["projection_id"], name: "index_reservations_on_projection_id"
     t.index ["user_id"], name: "index_reservations_on_user_id"
   end
@@ -49,10 +49,10 @@ ActiveRecord::Schema.define(version: 2020_02_26_193359) do
     t.string "mobile"
     t.string "email"
     t.string "id_number"
-    t.bigint "projection_id"
+    t.bigint "reservation_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["projection_id"], name: "index_users_on_projection_id"
+    t.index ["reservation_id"], name: "index_users_on_reservation_id"
   end
 
 end

@@ -5,7 +5,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.string :mobile
       t.string :email
       t.string :id_number
-      t.references :projection
+      t.references :reservation
       t.timestamps
     end
   end
