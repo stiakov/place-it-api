@@ -1,3 +1,4 @@
 class Movie < ApplicationRecord
+  validates_presence_of :title, :plot, :poster
   has_many :projections
 end
