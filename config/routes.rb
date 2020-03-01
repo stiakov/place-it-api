@@ -3,5 +3,6 @@ Rails.application.routes.draw do
   resources :projections
   resources :movies
   resources :users
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  get 'projections/filter/:showtime', to: 'projections#filter', as: :projections_by_day
 end

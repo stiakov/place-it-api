@@ -4,7 +4,13 @@ class ProjectionsController < ApplicationController
   # GET /projections
   def index
     @projections = Projection.all
+    render json: @projections
+  end
 
+  # GET /projections/filter/YYYY-MM-DD
+  def filter
+    parsed_date = Date.parse(projection_params[:showtime])
+    @projections = Projection.by_day(parsed_date)
     render json: @projections
   end
 
