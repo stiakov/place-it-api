@@ -3,8 +3,7 @@ class MoviesController < ApplicationController
 
   # GET /movies
   def index
-    @movies = Movie.all
-
+    @movies = Movie.all.reverse_order
     render json: @movies
   end
 
@@ -16,6 +15,14 @@ class MoviesController < ApplicationController
   # POST /movies
   def create
     @movie = Movie.new(movie_params)
+
+    from = params[:dates].first[:startDate].to_date
+    to = params[:dates].first[:endDate].to_date
+
+    Date.new(from.year, from.month, from.day).upto(Date.new(to.year, to.month, to.day)) do |date|
+      Projection.create!(movie: @movie, showtime: date)
+    end
+
 
     if @movie.save
       render json: @movie, status: :created, location: @movie
@@ -46,6 +53,6 @@ class MoviesController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def movie_params
-    params.permit(:title, :plot, :poster)
+    params.permit(:title, :plot, :poster, :dates)
   end
 end
