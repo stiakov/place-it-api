@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_26_193359) do
+ActiveRecord::Schema.define(version: 2020_03_01_201823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_193359) do
   create_table "movies", force: :cascade do |t|
     t.string "title"
     t.string "plot"
-    t.string "poster"
+    t.string "poster", default: "https://i.imgur.com/v7fzWHO.jpg"
     t.bigint "projection_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_193359) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["movie_id"], name: "index_projections_on_movie_id"
     t.index ["reservation_id"], name: "index_projections_on_reservation_id"
+    t.index ["showtime", "movie_id"], name: "index_projections_on_showtime_and_movie_id", unique: true
   end
 
   create_table "reservations", force: :cascade do |t|
