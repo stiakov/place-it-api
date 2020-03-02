@@ -1,5 +1,8 @@
 class MoviesController < ApplicationController
-  before_action :set_movie, only: [:show, :update, :destroy]
+  before_action :set_movie, only: %i[show update destroy]
+  before_action only: %i[create update] do
+    sanitize_params(movie_params)
+  end
 
   # GET /movies
   def index
@@ -15,7 +18,6 @@ class MoviesController < ApplicationController
   # POST /movies
   def create
     @movie = Movie.new(movie_params)
-
     from = params[:dates].first[:startDate].to_date
     to = params[:dates].first[:endDate].to_date
 

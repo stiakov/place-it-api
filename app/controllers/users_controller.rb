@@ -1,10 +1,12 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
+  before_action :set_user, only: %i[show update destroy]
+  before_action only: %i[create update] do
+    sanitize_params(user_params)
+  end
 
   # GET /users
   def index
     @users = User.all
-
     render json: @users
   end
 
