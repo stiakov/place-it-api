@@ -63,12 +63,12 @@ first.upto(last) do |date|
   @dates_collection << date
 end
 
-@movies.each do |film|
-  value = @dates_collection.sample
+@movies.each_with_index do |film, idx|
+  value = @dates_collection[idx]
   5.times do |i|
     Projection.create!(
       movie: film,
-      showtime: value + i.days
+      showtime: value + i.week
     )
   end
 end
