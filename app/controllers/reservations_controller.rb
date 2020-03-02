@@ -17,7 +17,9 @@ class ReservationsController < ApplicationController
 
   # POST /reservations
   def create
+    @reservation = nil
     @selected = Projection.find_by(showtime: params[:showtime], movie_id: params[:id].to_i)
+    @control = false
 
     if available_seats?(@selected)
       @user = User.find_by_id_number(params[:id_number])
@@ -31,11 +33,14 @@ class ReservationsController < ApplicationController
       end
 
       @reservation = @user.reservations.new(projection: @selected)
-      if @reservation.save && available_seats?
-        render json: @reservation, status: :created, location: @reservation
-      else
-        render json: @reservation.errors, status: :unprocessable_entity
-      end
+      @control = @reservation.save ? true : false
+
+    end
+
+    if @control
+      render json: @reservation, status: :created, location: @reservation
+    else
+      render json: @reservation.errors, status: :unprocessable_entity
     end
   end
 
@@ -66,11 +71,6 @@ class ReservationsController < ApplicationController
   end
 
   def available_seats?(projection)
-    puts reservation_params[:projection_id]
-    puts ')/$·%)·/$)%")·$%)"·$%(="·$(%="·$%(='
-    puts Reservation.all.where(projection_id: projection)
-    value = Reservation.all.where(projection_id: projection).count < 9
-    byebug
-    value
+    Reservation.all.where(projection_id: projection).count < 9
   end
 end
