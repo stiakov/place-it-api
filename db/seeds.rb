@@ -56,7 +56,7 @@ end
 @movies = Movie.all
 
 first = Date.new(2020, 3, 3)
-last =  Date.new(2020, 12, 31)
+last =  Date.new(2020, 4, 7)
 @dates_collection = []
 
 first.upto(last) do |date|
@@ -65,6 +65,9 @@ end
 
 @movies.each_with_index do |film, idx|
   value = @dates_collection.sample
+  puts '_//__________________///'
+  p @dates_collection
+  @dates_collection.filter! { |item| item != value }
   1.upto(5) do |i|
     Projection.create!(
       movie: film,
