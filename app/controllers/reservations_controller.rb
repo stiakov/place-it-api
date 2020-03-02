@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class ReservationsController < ApplicationController
   before_action :set_reservation, only: %i[show update destroy]
-  before_action :available_seats?, only: [:create]
 
   # GET /reservations
   def index
@@ -16,12 +17,25 @@ class ReservationsController < ApplicationController
 
   # POST /reservations
   def create
-    @reservation = Reservation.new(reservation_params)
+    @selected = Projection.find_by(showtime: params[:showtime], movie_id: params[:id].to_i)
 
-    if @reservation.save && available_seats?
-      render json: @reservation, status: :created, location: @reservation
-    else
-      render json: @reservation.errors, status: :unprocessable_entity
+    if available_seats?(@selected)
+      @user = User.find_by_id_number(params[:id_number])
+      if @user.nil?
+        @user = User.create!(
+          name: params[:name],
+          mobile: params[:mobile],
+          email: params[:email],
+          id_number: params[:id_number]
+        )
+      end
+
+      @reservation = @user.reservations.new(projection: @selected)
+      if @reservation.save && available_seats?
+        render json: @reservation, status: :created, location: @reservation
+      else
+        render json: @reservation.errors, status: :unprocessable_entity
+      end
     end
   end
 
@@ -40,6 +54,7 @@ class ReservationsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_reservation
     @reservation = Reservation.find(params[:id])
@@ -47,10 +62,15 @@ class ReservationsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def reservation_params
-    params.permit(:user_id, :projection_id)
+    params.permit(:name, :mobile, :email, :id_number, :showtime, :id, :title, :plot, :poster, :projections, :reservation)
   end
 
-  def available_seats?
-    Reservation.all.where(projection_id: reservation_params[:projection_id]).count < 9
+  def available_seats?(projection)
+    puts reservation_params[:projection_id]
+    puts ')/$·%)·/$)%")·$%)"·$%(="·$(%="·$%(='
+    puts Reservation.all.where(projection_id: projection)
+    value = Reservation.all.where(projection_id: projection).count < 9
+    byebug
+    value
   end
 end
