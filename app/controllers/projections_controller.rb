@@ -1,5 +1,10 @@
+# frozen_string_literal: true
+
 class ProjectionsController < ApplicationController
-  before_action :set_projection, only: [:show, :update, :destroy]
+  before_action :set_projection, only: %i[show update destroy]
+  before_action only: %i[create update] do
+    sanitize_params(projection_params)
+  end
 
   # GET /projections
   def index
@@ -11,7 +16,7 @@ class ProjectionsController < ApplicationController
   def filter
     parsed_date = Date.parse(projection_params[:showtime])
     @projections = Projection.by_day(parsed_date)
-    render json: @projections
+    render json: @projections.map(&:movie)
   end
 
   # GET /projections/1
@@ -45,6 +50,7 @@ class ProjectionsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_projection
     @projection = Projection.find(params[:id])
