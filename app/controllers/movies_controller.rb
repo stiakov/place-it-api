@@ -20,7 +20,6 @@ class MoviesController < ApplicationController
     @movie = Movie.new(movie_params)
     from = params[:dates].first[:startDate].to_date
     to = params[:dates].first[:endDate].to_date
-
     Date.new(from.year, from.month, from.day).upto(Date.new(to.year, to.month, to.day)) do |date|
       Projection.create!(movie: @movie, showtime: date)
     end

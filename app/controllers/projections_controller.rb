@@ -16,7 +16,12 @@ class ProjectionsController < ApplicationController
   def filter
     parsed_date = Date.parse(projection_params[:showtime])
     @projections = Projection.by_day(parsed_date)
-    render json: @projections.map(&:movie)
+    if @projections.empty?
+      render json: { movies: []
+      }, status: :not_found
+    else
+      render json: @projections.map(&:movie)
+    end
   end
 
   # GET /projections/1
