@@ -15,6 +15,13 @@ class ReservationsController < ApplicationController
     render json: @reservation
   end
 
+  # GET /reservations/filter/YYYY-MM-DD
+  def filter
+    parsed_date = Date.parse(reservation_params[:showtime])
+    projections = Reservation.by_day(parsed_date)
+    render json: projections
+  end
+
   # POST /reservations
   def create
     @reservation = nil

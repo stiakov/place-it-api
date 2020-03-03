@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   resources :users
 
   get 'projections/filter/:showtime', to: 'projections#filter', as: :projections_by_day
+  get 'reservations/filter/:showtime', to: 'reservations#filter', as: :reservations_by_day
 end
