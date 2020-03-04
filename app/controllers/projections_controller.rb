@@ -63,6 +63,6 @@ class ProjectionsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def projection_params
-    params.permit(:showtime, :movie_id, :reservation_id)
+    params.permit(:id, :showtime, :movie_id, :reservation_id)
   end
 end
