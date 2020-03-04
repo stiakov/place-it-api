@@ -78,6 +78,6 @@ class ReservationsController < ApplicationController
   end
 
   def available_seats?(projection)
-    Reservation.all.where(projection_id: projection).count < 9
+    Reservation.all.where(projection_id: projection).count < 10
   end
 end
