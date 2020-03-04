@@ -47,10 +47,12 @@ POST /reservations
 GET /reservations/1
 UPDATE /reservations/1
 DELETE /reservations/1
+GET /reservations/filter/YYYY_DD-MM'
 
 GET /projections
 POST /projections
 GET /projections/1
 UPDATE /projections/1
 DELETE /projections/1
+GET /projections/filter/YYYY_DD-MM'
 ```
